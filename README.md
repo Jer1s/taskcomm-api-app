@@ -6,6 +6,7 @@ This repository is the backend part of TaskComm project.
 
 ## Project Structure
 
+- config/: This folder is for storing configuration files
 - migrations/: This folder is for managing database schema changes.
 - models/: This folder is for defining sequelize models.
 - seeders/: This folder is for managing seed data for database initialization.
