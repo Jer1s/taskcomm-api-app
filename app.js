@@ -9,4 +9,7 @@ app.use(express.json());
 
 app.listen(process.env.PORT || 3000, () => {
   console.log("Server is listening...");
+  User.findAll().then((users) => {
+    console.log(users);
+  });
 });
