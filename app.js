@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 
 const db = require("./models");
+const User = db.User;
 
 app.use(express.json());
 
