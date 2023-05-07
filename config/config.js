@@ -7,10 +7,10 @@ module.exports = {
     dialect: "mysql",
   },
   test: {
-    username: "root",
-    password: null,
-    database: "TaskComm_test",
-    host: "127.0.0.1",
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB,
+    host: process.env.HOST,
     dialect: "mysql",
   },
   production: {
