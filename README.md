@@ -1,4 +1,4 @@
-# TaskCommBackend
+# Task Comm backend
 
 Task Comm project is a web application being developed to provide a web service that allows users to store to-do list.
 
