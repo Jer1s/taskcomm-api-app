@@ -21,4 +21,4 @@ This project is licensed under the MIT License. See the LICENSE.md file for deta
 - [x] Make Post Model
 - [ ] Associate Posts with User (N:1)
 - [x] Respond to post resquest
-- [ ] Implement login feature
+- [ ] Add order to the Posts model
