@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
     {
       title: DataTypes.STRING,
       comment: DataTypes.STRING,
+      order: DataTypes.INTEGER,
+      section: DataTypes.STRING,
+      is_hide: DataTypes.BOOLEAN,
       user_id: DataTypes.INTEGER,
     },
     {

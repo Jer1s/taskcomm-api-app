@@ -8,6 +8,9 @@ module.exports = {
         id: 1,
         title: "할 일",
         comment: "코멘트",
+        order: 1,
+        section: "todo",
+        is_hide: false,
         user_id: 1,
       },
     ]);

@@ -21,4 +21,4 @@ This project is licensed under the MIT License. See the LICENSE.md file for deta
 - [x] Make Post Model
 - [ ] Associate Posts with User (N:1)
 - [x] Respond to post resquest
-- [ ] Add order to the Posts model
+- [x] Add order, section type, is_hide fields to the Posts model

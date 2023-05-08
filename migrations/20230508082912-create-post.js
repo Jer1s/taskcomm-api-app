@@ -15,6 +15,15 @@ module.exports = {
       comment: {
         type: Sequelize.STRING,
       },
+      order: {
+        type: Sequelize.INTEGER,
+      },
+      section: {
+        type: Sequelize.STRING,
+      },
+      is_hide: {
+        type: Sequelize.BOOLEAN,
+      },
       user_id: {
         type: Sequelize.INTEGER,
       },
