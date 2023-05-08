@@ -8,6 +8,10 @@ const Post = db.Post;
 
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.send("URL should contain /api/..");
+});
+
 app.get("/api/users", async (req, res) => {
   const Users = await User.findAll();
   res.send(Users);
