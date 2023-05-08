@@ -4,7 +4,23 @@
 #
 
 app = "misty-sea-2259"
+kill_signal = "SIGINT"
+kill_timeout = 5
 primary_region = "nrt"
+
+[processes]
+app = "--datadir /data/mysql 
+  --default-authentication-plugin mysql_native_password 
+  --performance-schema=OFF 
+  --innodb-buffer-pool-size 64M"
+
+[mounts]
+  source="mysqldata"
+  destination="/data"
+
+[env]
+  MYSQL_DATABASE = "TaskComm"
+  MYSQL_USER = "root"
 
 [http_service]
   internal_port = 8080
