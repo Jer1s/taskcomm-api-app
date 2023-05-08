@@ -16,3 +16,7 @@ This repository is the backend part of TaskComm project.
 This project is licensed under the MIT License. See the LICENSE.md file for details.
 
 ## Progress
+
+- [x] Make User Model
+- [ ] Make Post Model
+- [ ] Associate Post with User (N:1)
