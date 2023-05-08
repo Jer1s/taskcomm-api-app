@@ -20,3 +20,4 @@ This project is licensed under the MIT License. See the LICENSE.md file for deta
 - [x] Make User Model
 - [x] Make Post Model
 - [ ] Associate Posts with User (N:1)
+- [x] Respond to post resquest
