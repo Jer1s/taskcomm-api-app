@@ -4,6 +4,7 @@ const app = express();
 
 const db = require("./models");
 const User = db.User;
+const Post = db.Post;
 
 app.use(express.json());
 
@@ -14,7 +15,7 @@ app.get("/api/users", async (req, res) => {
 
 app.get("/api/users/:id", async (req, res) => {
   const { id } = req.params;
-  const user = await User.findOne({ where: { id: id } });
+  const user = await User.findOne({ where: { id } });
   if (user) {
     res.send(user);
   } else {
@@ -42,6 +43,54 @@ app.put("/api/users/:id", async (req, res) => {
 app.delete("/api/users/:id", async (req, res) => {
   const { id } = req.params;
   const deleteCount = await User.destroy({ where: { id } });
+  if (deleteCount) {
+    res.send({ message: `${deleteCount} row(s) deleted ` });
+  } else {
+    res.status(404).send({ message: "There is no user with the id!" });
+  }
+});
+
+app.get("/api/posts", async (req, res) => {
+  const { userId } = req.query;
+  if (userId) {
+    const ownPosts = await Post.findAll({ where: { user_id: userId } });
+    res.send(ownPosts);
+  } else {
+    const Posts = await Post.findAll();
+    res.send(Posts);
+  }
+});
+
+app.get("/api/posts/:id", async (req, res) => {
+  const { id } = req.params;
+  const post = await Post.findOne({ where: { id } });
+  if (post) {
+    res.send(post);
+  } else {
+    res.status(404).send({ message: "There is no such post" });
+  }
+});
+
+app.post("/api/posts", async (req, res) => {
+  const newPost = req.body;
+  const post = await Post.create(newPost);
+  res.send(post);
+});
+
+app.put("/api/posts/:id", async (req, res) => {
+  const { id } = req.params;
+  const newInfo = req.body;
+  const result = await Post.update(newInfo, { where: { id } });
+  if (result[0]) {
+    res.send({ message: `${result[0]} row(s) affected` });
+  } else {
+    res.status(404).send({ message: "There is no user with the id!" });
+  }
+});
+
+app.delete("/api/posts/:id", async (req, res) => {
+  const { id } = req.params;
+  const deleteCount = await Post.destroy({ where: { id } });
   if (deleteCount) {
     res.send({ message: `${deleteCount} row(s) deleted ` });
   } else {
