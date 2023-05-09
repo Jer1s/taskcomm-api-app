@@ -25,6 +25,8 @@ backend
 ├─ app.js
 ├─ config
 │  └─ config.js
+├─ controller
+│  └─ index.js
 ├─ migrations
 │  ├─ 20230508082825-create-user.js
 │  └─ 20230508082912-create-post.js
@@ -56,4 +58,4 @@ This project is licensed under the MIT License. See the LICENSE.md file for deta
 - [x] Respond to post resquest
 - [x] Add order, section, is_hide fields to the Posts model
 - [ ] Associate Posts with User (N:1)
-- [x] Implement JWT Web Token login
+- [ ] Implement JWT Web Token login
