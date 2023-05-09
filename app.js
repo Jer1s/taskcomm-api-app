@@ -1,8 +1,7 @@
 require("dotenv").config();
 
 const express = require("express");
-// const cookieParser = require("cookie-parser");
-// const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const {
   login,
   accessToken,
@@ -18,14 +17,7 @@ const User = db.User;
 const Post = db.Post;
 
 app.use(express.json());
-// app.use(cookieParser);
-// app.use(
-//   cors({
-//     origin: process.env.HOST + ":" + process.env.PORT,
-//     methods: ["GET", "POST"],
-//     credentials: true,
-//   })
-// );
+app.use(cookieParser());
 
 // // Login
 app.post("/login", login);
