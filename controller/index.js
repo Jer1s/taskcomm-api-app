@@ -39,11 +39,13 @@ const login = async (req, res) => {
     res.cookie("accessToken", accessToken, {
       secure: false,
       httpOnly: false,
+      sameSite: "None",
     });
 
     res.cookie("refreshToken", refreshToken, {
       secure: false,
       httpOnly: false,
+      sameSite: "None",
     });
     res.send({ message: "login success" });
   } catch (err) {
