@@ -1,20 +1,52 @@
+require("dotenv").config();
+
 const express = require("express");
+// const cookieParser = require("cookie-parser");
+// const cors = require("cors");
+const {
+  login,
+  accessToken,
+  refreshToken,
+  loginSuccess,
+  logout,
+} = require("./controller");
+const db = require("./models");
 
 const app = express();
 
-const db = require("./models");
 const User = db.User;
 const Post = db.Post;
 
 app.use(express.json());
+// app.use(cookieParser);
+// app.use(
+//   cors({
+//     origin: process.env.HOST + ":" + process.env.PORT,
+//     methods: ["GET", "POST"],
+//     credentials: true,
+//   })
+// );
 
+// // Login
+app.post("/login", login);
+app.get("/accesstoken", accessToken);
+app.get("/refreshtoken"), refreshToken;
+app.get("/login/success", loginSuccess);
+app.post("/logout", logout);
+
+// CRUD
 app.get("/", (req, res) => {
   res.send("URL should contain /api/..");
 });
 
 app.get("/api/users", async (req, res) => {
-  const Users = await User.findAll();
-  res.send(Users);
+  try {
+    const Users = await User.findAll();
+    res.send(Users);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 app.get("/api/users/:id", async (req, res) => {
@@ -103,5 +135,5 @@ app.delete("/api/posts/:id", async (req, res) => {
 });
 
 app.listen(process.env.PORT || 3000, () => {
-  console.log("Server is listening...");
+  console.log(`Server is on ${process.env.PORT}`);
 });
