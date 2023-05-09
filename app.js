@@ -10,12 +10,14 @@ const {
   logout,
 } = require("./controller");
 const db = require("./models");
+const cors = require("cors");
 
 const app = express();
 
 const User = db.User;
 const Post = db.Post;
 
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
