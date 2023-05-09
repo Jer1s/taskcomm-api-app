@@ -11,6 +11,7 @@ const {
 } = require("./controller");
 const db = require("./models");
 const cors = require("cors");
+const redis = require("redis");
 
 const app = express();
 
@@ -22,7 +23,11 @@ app.use(express.json());
 app.use(cookieParser());
 
 // // Login
-app.post("/login", login);
+app.post("/login", async (req, res) => {
+  const client = redis.createClient(process.env.REDIS_PORT);
+  await login(req, res, client);
+  client.quit();
+});
 app.get("/login/success", loginSuccess);
 app.post("/logout", logout);
 

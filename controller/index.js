@@ -1,23 +1,19 @@
 require("dotenv").config();
-const redis = require("redis");
 const db = require("../models");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const client = redis.createClient(process.env.REDIS_PORT);
 
 const User = db.User;
 
-const login = async (req, res) => {
+const login = async (req, res, client) => {
   const { id, password } = req.body;
-
   try {
     const user = await User.findOne({ where: { id } });
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-    // 입력한 비밀번호와 저장된 해시 비밀번호를 비교
-    const isValidPassword = await bcrypt.compare(password, user.password);
-    if (!isValidPassword) {
+
+    if (password !== user.password) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
@@ -35,6 +31,7 @@ const login = async (req, res) => {
 
     // Redis에 refresh token 저장
     client.set(user.id, refreshToken);
+    console.log(`client: ${client}`);
 
     // token 전송
     res.json({ accessToken, refreshToken });
