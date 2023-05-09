@@ -11,29 +11,30 @@ const {
 } = require("./controller");
 const db = require("./models");
 const cors = require("cors");
-const redis = require("redis");
 
 const app = express();
 
 const User = db.User;
 const Post = db.Post;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: "GET, POST, OPTIONS, PUT, DELETE, PATCH",
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 
 // // Login
-app.post("/login", async (req, res) => {
-  const client = redis.createClient(process.env.REDIS_PORT);
-  await login(req, res, client);
-  client.quit();
-});
+app.post("/login", login);
 app.get("/login/success", loginSuccess);
 app.post("/logout", logout);
 
 // CRUD
 app.get("/", (req, res) => {
-  res.send("URL should contain /api/..");
+  res.send({ message: "URL should contain /api/.." });
 });
 
 app.get("/api/users", async (req, res) => {

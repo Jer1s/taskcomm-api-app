@@ -5,15 +5,16 @@ const bcrypt = require("bcrypt");
 
 const User = db.User;
 
-const login = async (req, res, client) => {
+const login = async (req, res) => {
   const { id, password } = req.body;
   try {
     const user = await User.findOne({ where: { id } });
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-
-    if (password !== user.password) {
+    // 입력한 비밀번호와 저장된 해시 비밀번호를 비교
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    if (!isValidPassword) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
@@ -28,13 +29,23 @@ const login = async (req, res, client) => {
       process.env.JWT_REFRESH_SECRET,
       { expiresIn: "7d" }
     );
-
-    // Redis에 refresh token 저장
-    client.set(user.id, refreshToken);
-    console.log(`client: ${client}`);
+    res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS, GET");
+    res.setHeader("Access-Control-Allow-Credentials", "true"); // 쿠키도 공유
+    res.setHeader("Access-Control-Allow-Headers", "Context-type");
+    res.setHeader("Set-Cookie", "token=true");
 
     // token 전송
-    res.json({ accessToken, refreshToken });
+    res.cookie("accessToken", accessToken, {
+      secure: false,
+      httpOnly: false,
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      secure: false,
+      httpOnly: false,
+    });
+    res.send({ message: "login success" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
