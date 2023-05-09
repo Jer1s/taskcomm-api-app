@@ -19,7 +19,7 @@ const Post = db.Post;
 
 app.use(
   cors({
-    origin: "https://deploy-preview-2--taskcomm.netlify.app",
+    origin: "https://localhost:5173",
     methods: "GET, POST, OPTIONS, PUT, DELETE, PATCH",
     credentials: true,
   })
