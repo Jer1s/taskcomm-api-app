@@ -4,8 +4,8 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const {
   login,
-  accessToken,
-  refreshToken,
+  verifyToken,
+  verifyRefreshToken,
   loginSuccess,
   logout,
 } = require("./controller");
@@ -21,8 +21,6 @@ app.use(cookieParser());
 
 // // Login
 app.post("/login", login);
-app.get("/accesstoken", accessToken);
-app.get("/refreshtoken", refreshToken);
 app.get("/login/success", loginSuccess);
 app.post("/logout", logout);
 
