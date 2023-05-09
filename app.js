@@ -30,7 +30,7 @@ app.use(express.json());
 // // Login
 app.post("/login", login);
 app.get("/accesstoken", accessToken);
-app.get("/refreshtoken"), refreshToken;
+app.get("/refreshtoken", refreshToken);
 app.get("/login/success", loginSuccess);
 app.post("/logout", logout);
 
