@@ -56,3 +56,4 @@ This project is licensed under the MIT License. See the LICENSE.md file for deta
 - [x] Respond to post resquest
 - [x] Add order, section, is_hide fields to the Posts model
 - [ ] Associate Posts with User (N:1)
+- [ ] Implement JWT Web Token login
