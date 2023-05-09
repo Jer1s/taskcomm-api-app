@@ -11,6 +11,10 @@ Task Comm project is a web application being developed to provide a web service 
 
 This repository is the backend part of TaskComm project.
 
+## Deploy
+
+The server can be accessed at [https://taskcomm-api-app.herokuapp.com/](https://taskcomm-api-app.herokuapp.com/).
+
 ## Project Structure
 
 ```
