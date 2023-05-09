@@ -37,15 +37,11 @@ const login = async (req, res) => {
 
     // token 전송
     res.cookie("accessToken", accessToken, {
-      secure: false,
-      httpOnly: false,
       sameSite: "None",
     });
 
     res.cookie("refreshToken", refreshToken, {
-      secure: false,
-      httpOnly: false,
-      sameSite: "None",
+      sameSite: "none",
     });
     res.send({ message: "login success" });
   } catch (err) {
