@@ -19,7 +19,7 @@ const Post = db.Post;
 
 app.use(
   cors({
-    origin: "https://deploy-preview-2--taskcomm.netlify.app",
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );
@@ -27,9 +27,13 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-// // Login
-app.post("/login", login);
-app.get("/accesstoken", verifyToken, async (req, res) => {
+app.get("/", (req, res) => {
+  res.send({ message: "URL should contain /api/.." });
+});
+
+// Login
+app.post("/api/login", login);
+app.get("/api/accesstoken", verifyToken, async (req, res) => {
   try {
     const user = await User.findOne({ where: { id: req.userId } });
     res.send(user);
@@ -38,13 +42,19 @@ app.get("/accesstoken", verifyToken, async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
-app.get("/login/success", loginSuccess);
-app.post("/logout", logout);
+app.get("/api/refereshtoken", verifyRefreshToken, async (req, res) => {
+  try {
+    const user = await User.findOne({ where: { id: req.userId } });
+    res.send(user);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+app.get("/api/login/success", loginSuccess);
+app.get("/api/logout", logout);
 
 // CRUD
-app.get("/", (req, res) => {
-  res.send({ message: "URL should contain /api/.." });
-});
 
 app.get("/api/users", async (req, res) => {
   try {

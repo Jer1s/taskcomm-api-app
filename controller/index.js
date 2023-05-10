@@ -114,14 +114,9 @@ const loginSuccess = async (req, res) => {
 };
 
 const logout = (req, res) => {
-  try {
-    const token = req.headers.authorization.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    client.del(decoded.id);
-    res.send({ message: "Logout Success" });
-  } catch (err) {
-    res.status(500).json({ message: "Server error" });
-  }
+  res.clearCookie("accessToken");
+  res.clearCookie("refreshToken");
+  res.send({ message: "Logout Success" });
 };
 
 module.exports = {
