@@ -29,26 +29,20 @@ const login = async (req, res) => {
       process.env.JWT_REFRESH_SECRET,
       { expiresIn: "7d" }
     );
-    // res.setHeader(
-    //   "Access-Control-Allow-Origin",
-    //   "https://deploy-preview-2--taskcomm.netlify.app"
-    // );
-    // res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS, GET");
-    // res.setHeader("Access-Control-Allow-Credentials", "true"); // 쿠키도 공유
-    // res.setHeader(
-    //   "Access-Control-Allow-Headers",
-    //   "Content-Type, Authorization"
-    // );
 
     // token 전송
     res.cookie("accessToken", accessToken, {
       secure: true,
       sameSite: "None",
+      httpOnly: true,
+      expires: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
     });
 
     res.cookie("refreshToken", refreshToken, {
       secure: true,
       sameSite: "None",
+      httpOnly: true,
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
     });
     res.send({ message: "login success" });
   } catch (err) {
@@ -60,19 +54,18 @@ const login = async (req, res) => {
 const verifyToken = (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
-    if (authHeader) {
-      const token = authHeader.split(" ")[1];
-      // JWT 토큰 검증
-      jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-        if (err) {
-          return res.status(403).json({ message: "Invalid token" });
-        }
-        req.userId = decoded.id;
-        next();
-      });
-    } else {
+    if (!authHeader) {
       return res.status(401).json({ message: "Unauthorized" });
     }
+
+    const token = authHeader.split(" ")[1];
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+        return res.status(403).json({ message: "Invalid token" });
+      }
+      req.userId = decoded.id;
+      next();
+    });
   } catch (err) {
     console.error(err);
     return res.status(401).json({ message: "Unauthorized" });
