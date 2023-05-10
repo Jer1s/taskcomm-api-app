@@ -35,7 +35,7 @@ const login = async (req, res) => {
     );
     res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS, GET");
     res.setHeader("Access-Control-Allow-Credentials", "true"); // 쿠키도 공유
-    res.setHeader("Access-Control-Allow-Headers", "Context-type");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
     res.setHeader("Set-Cookie", "token=true");
 
     // token 전송
