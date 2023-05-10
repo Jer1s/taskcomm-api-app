@@ -4,8 +4,8 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const {
   login,
-  verifyToken,
-  verifyRefreshToken,
+  verifyAccessToken,
+  getAccessToken,
   loginSuccess,
   logout,
 } = require("./controller");
@@ -33,29 +33,11 @@ app.get("/", (req, res) => {
 
 // Login
 app.post("/api/login", login);
-app.get("/api/accesstoken", verifyToken, async (req, res) => {
-  try {
-    const user = await User.findOne({ where: { id: req.userId } });
-    res.send(user);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
-  }
-});
-app.get("/api/refereshtoken", verifyRefreshToken, async (req, res) => {
-  try {
-    const user = await User.findOne({ where: { id: req.userId } });
-    res.send(user);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
-  }
-});
-app.get("/api/login/success", loginSuccess);
+app.get("/api/accesstoken", verifyAccessToken, getAccessToken);
+// app.get("/api/login/success", loginSuccess);
 app.get("/api/logout", logout);
 
 // CRUD
-
 app.get("/api/users", async (req, res) => {
   try {
     const Users = await User.findAll();

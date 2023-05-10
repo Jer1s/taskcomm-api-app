@@ -51,53 +51,85 @@ const login = async (req, res) => {
   }
 };
 
-const verifyToken = (req, res, next) => {
+const verifyAccessToken = (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization;
+    const authHeader = req?.headers?.authorization;
     if (!authHeader) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res
+        .status(401)
+        .json({ message: "Authorization header is missing" });
     }
-
-    const token = authHeader.split(" ")[1];
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-      if (err) {
-        console.error(err);
-        return res.status(403).json({ message: "Invalid token" });
-      }
+    const accessToken = authHeader.split(" ")[1];
+    try {
+      const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
       req.userId = decoded.id;
       next();
-    });
+    } catch (err) {
+      console.error(err);
+      return res.status(403).json({ message: "Invalid access token" });
+    }
   } catch (err) {
     console.error(err);
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(500).json({ message: "Server error" });
   }
 };
 
-const verifyRefreshToken = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  if (authHeader) {
-    const refresh_token = authHeader.split(" ")[1];
-    // JWT 토큰 검증
-    jwt.verify(
-      refresh_token,
-      process.env.JWT_REFRESH_SECRET,
-      (err, decoded) => {
-        if (err) {
-          return res.status(403).json({ message: "Invalid refresh token" });
-        }
-        const userId = decoded.id;
-        // Redis에서 해당 userId에 저장된 Refresh Token 검색
-        client.get(userId, (err, value) => {
-          if (err || value !== refresh_token) {
-            return res.status(403).json({ message: "Invalid refresh token" });
-          }
-          req.userId = userId;
-          next();
-        });
+const generateAccessToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+};
+
+const verifyRefreshToken = (refreshToken) => {
+  return new Promise((resolve, reject) => {
+    jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, (err, decoded) => {
+      if (err) {
+        return reject(err);
       }
+      resolve(decoded.id);
+    });
+  });
+};
+
+const generateRefreshToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
+};
+
+const getNewTokens = async (refreshToken) => {
+  try {
+    const id = await verifyRefreshToken(refreshToken);
+    const accessToken = generateAccessToken(id);
+    const newRefreshToken = generateRefreshToken(id);
+    return { accessToken, refreshToken: newRefreshToken };
+  } catch (err) {
+    console.error(err);
+    throw new Error("Invalid token");
+  }
+};
+
+const getAccessToken = async (req, res) => {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+    const { accessToken, refreshToken: newRefreshToken } = await getNewTokens(
+      refreshToken
     );
-  } else {
-    return res.status(401).json({ message: "Unauthorized" });
+
+    res.cookie("accessToken", accessToken, {
+      secure: true,
+      sameSite: "none",
+      httpOnly: true,
+      expires: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
+    });
+
+    res.cookie("refreshToken", newRefreshToken, {
+      secure: true,
+      sameSite: "none",
+      httpOnly: true,
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+    });
+
+    res.status(200).json({ message: "Success" });
+  } catch (err) {
+    console.error(err);
+    res.status(401).json({ message: "Unauthorized" });
   }
 };
 
@@ -122,8 +154,8 @@ const logout = (req, res) => {
 
 module.exports = {
   login,
-  verifyToken,
-  verifyRefreshToken,
+  verifyAccessToken,
+  getAccessToken,
   loginSuccess,
   logout,
 };
