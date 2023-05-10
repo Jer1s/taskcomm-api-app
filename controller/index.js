@@ -39,17 +39,17 @@ const login = async (req, res) => {
     res.setHeader("Set-Cookie", "token=true");
 
     // token 전송
-    res.cookie("accessToken", accessToken, {
-      secure: process.env.NODE_ENV === "production",
-      httpOnly: true,
-      sameSite: "None",
-    });
+    // res.cookie("accessToken", accessToken, {
+    //   secure: process.env.NODE_ENV === "production",
+    //   httpOnly: true,
+    //   sameSite: "None",
+    // });
 
-    res.cookie("refreshToken", refreshToken, {
-      secure: process.env.NODE_ENV === "production",
-      httpOnly: true,
-      sameSite: "lax",
-    });
+    // res.cookie("refreshToken", refreshToken, {
+    //   secure: process.env.NODE_ENV === "production",
+    //   httpOnly: true,
+    //   sameSite: "lax",
+    // });
     res.header("Access-Control-Allow-Credentials", true);
     res.send({ message: "login success" });
   } catch (err) {
