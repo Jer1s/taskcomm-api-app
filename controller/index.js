@@ -50,6 +50,7 @@ const login = async (req, res) => {
       httpOnly: true,
       sameSite: "lax",
     });
+    res.header("Access-Control-Allow-Credentials", true);
     res.send({ message: "login success" });
   } catch (err) {
     console.error(err);
