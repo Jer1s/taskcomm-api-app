@@ -38,9 +38,15 @@ const login = async (req, res) => {
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
     // token 전송
-    res.cookie("accessToken", accessToken, {});
+    res.cookie("accessToken", accessToken, {
+      secure: true,
+      sameSite: "None",
+    });
 
-    res.cookie("refreshToken", refreshToken, {});
+    res.cookie("refreshToken", refreshToken, {
+      secure: true,
+      sameSite: "None",
+    });
     res.send({ message: "login success" });
   } catch (err) {
     console.error(err);
