@@ -36,21 +36,19 @@ const login = async (req, res) => {
     res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS, GET");
     res.setHeader("Access-Control-Allow-Credentials", "true"); // 쿠키도 공유
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-    res.setHeader("Set-Cookie", "token=true");
 
     // token 전송
     res.cookie("accessToken", accessToken, {
-      secure: process.env.NODE_ENV === "production",
-      httpOnly: true,
+      secure: true,
+      httpOnly: false,
       sameSite: "None",
     });
 
     res.cookie("refreshToken", refreshToken, {
-      secure: process.env.NODE_ENV === "production",
-      httpOnly: true,
+      secure: true,
+      httpOnly: false,
       sameSite: "None",
     });
-    res.header("Access-Control-Allow-Credentials", true);
     res.send({ message: "login success" });
   } catch (err) {
     console.error(err);
