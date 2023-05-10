@@ -6,7 +6,6 @@ const {
   login,
   verifyAccessToken,
   getAccessToken,
-  loginSuccess,
   logout,
 } = require("./controller");
 const db = require("./models");
@@ -19,7 +18,8 @@ const Post = db.Post;
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://deploy-preview-2--taskcomm.netlify.app",
+    // origin: "http://localhost:5173",
     credentials: true,
   })
 );
@@ -31,13 +31,13 @@ app.get("/", (req, res) => {
   res.send({ message: "URL should contain /api/.." });
 });
 
-// Login
+// Login api
 app.post("/api/login", login);
 app.get("/api/accesstoken", verifyAccessToken, getAccessToken);
 // app.get("/api/login/success", loginSuccess);
 app.get("/api/logout", logout);
 
-// CRUD
+// Model api
 app.get("/api/users", async (req, res) => {
   try {
     const Users = await User.findAll();
