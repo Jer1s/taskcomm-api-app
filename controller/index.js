@@ -29,7 +29,10 @@ const login = async (req, res) => {
       process.env.JWT_REFRESH_SECRET,
       { expiresIn: "7d" }
     );
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+    res.setHeader(
+      "Access-Control-Allow-Origin",
+      "https://deploy-preview-2--taskcomm.netlify.app/signin"
+    );
     res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS, GET");
     res.setHeader("Access-Control-Allow-Credentials", "true"); // 쿠키도 공유
     res.setHeader("Access-Control-Allow-Headers", "Context-type");
@@ -37,11 +40,15 @@ const login = async (req, res) => {
 
     // token 전송
     res.cookie("accessToken", accessToken, {
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
       sameSite: "None",
     });
 
     res.cookie("refreshToken", refreshToken, {
-      sameSite: "none",
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      sameSite: "lax",
     });
     res.send({ message: "login success" });
   } catch (err) {
