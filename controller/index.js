@@ -29,16 +29,16 @@ const login = async (req, res) => {
       process.env.JWT_REFRESH_SECRET,
       { expiresIn: "7d" }
     );
-    res.setHeader(
-      "Access-Control-Allow-Origin",
-      "https://deploy-preview-2--taskcomm.netlify.app"
-    );
-    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS, GET");
-    res.setHeader("Access-Control-Allow-Credentials", "true"); // 쿠키도 공유
-    res.setHeader(
-      "Access-Control-Allow-Headers",
-      "Content-Type, Authorization"
-    );
+    // res.setHeader(
+    //   "Access-Control-Allow-Origin",
+    //   "https://deploy-preview-2--taskcomm.netlify.app"
+    // );
+    // res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS, GET");
+    // res.setHeader("Access-Control-Allow-Credentials", "true"); // 쿠키도 공유
+    // res.setHeader(
+    //   "Access-Control-Allow-Headers",
+    //   "Content-Type, Authorization"
+    // );
 
     // token 전송
     res.cookie("accessToken", accessToken, {
