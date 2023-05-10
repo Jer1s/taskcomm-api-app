@@ -29,6 +29,15 @@ app.use(cookieParser());
 
 // // Login
 app.post("/login", login);
+app.get("/accesstoken", verifyToken, async (req, res) => {
+  try {
+    const user = await User.findOne({ where: { id: req.userId } });
+    res.send(user);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 app.get("/login/success", loginSuccess);
 app.post("/logout", logout);
 
