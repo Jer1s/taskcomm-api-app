@@ -31,7 +31,7 @@ const login = async (req, res) => {
     );
     res.setHeader(
       "Access-Control-Allow-Origin",
-      "https://deploy-preview-2--taskcomm.netlify.app/signin"
+      "https://deploy-preview-2--taskcomm.netlify.app"
     );
     res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS, GET");
     res.setHeader("Access-Control-Allow-Credentials", "true"); // 쿠키도 공유
@@ -39,17 +39,17 @@ const login = async (req, res) => {
     res.setHeader("Set-Cookie", "token=true");
 
     // token 전송
-    // res.cookie("accessToken", accessToken, {
-    //   secure: process.env.NODE_ENV === "production",
-    //   httpOnly: true,
-    //   sameSite: "None",
-    // });
+    res.cookie("accessToken", accessToken, {
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      sameSite: "None",
+    });
 
-    // res.cookie("refreshToken", refreshToken, {
-    //   secure: process.env.NODE_ENV === "production",
-    //   httpOnly: true,
-    //   sameSite: "lax",
-    // });
+    res.cookie("refreshToken", refreshToken, {
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      sameSite: "None",
+    });
     res.header("Access-Control-Allow-Credentials", true);
     res.send({ message: "login success" });
   } catch (err) {
